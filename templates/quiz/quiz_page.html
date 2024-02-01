@@ -1,0 +1,102 @@
+<!-- quiz/quiz_page.html -->
+{% extends 'base.html' %}
+
+{% block title %}Welcome To Djnago Quiz Application{% endblock %}
+{% block content %}
+  <div class="container-narrow">
+    <h2>Quiz Application</h2>
+    <form method="post" id="quiz-form">
+      {% csrf_token %}
+      {% for question in questions %}
+        <div class="input-group" {% if forloop.first %}style="display: block;"{% else %}style="display: none;"{% endif %}>
+          <strong>{{ question.question_text }}</strong><br>
+          <style>
+            .options-container {
+              display: flex;
+              flex-direction: column;
+              gap: 10px;
+              width: 200px;
+            }
+
+            .option {
+              display: flex;
+              align-items: center;
+            }
+
+            .option input {
+              width: 20px;
+              margin-right: 10px;
+            }
+            .option label {
+              white-space: nowrap;
+            }
+          </style>
+
+          <div class="options-container">
+            <div class="option">
+              <input type="radio" id="option_a_{{ question.id }}" name="question_{{ question.id }}" value="A">
+              <label for="option_a_{{ question.id }}">A)  {{ question.option_a }}</label>
+            </div>
+
+            <div class="option">
+              <input type="radio" id="option_b_{{ question.id }}" name="question_{{ question.id }}" value="B">
+              <label for="option_b_{{ question.id }}">B)  {{ question.option_b }}</label>
+            </div>
+
+            <div class="option">
+              <input type="radio" id="option_c_{{ question.id }}" name="question_{{ question.id }}" value="C">
+              <label for="option_c_{{ question.id }}">C)  {{ question.option_c }}</label>
+            </div>
+
+            <div class="option">
+              <input type="radio" id="option_d_{{ question.id }}" name="question_{{ question.id }}" value="D">
+              <label for="option_d_{{ question.id }}">D)  {{ question.option_d }}</label>
+            </div>
+          </div>
+
+        </div>
+      {% endfor %}
+      <div class="button-group">
+        
+      <div class="button-group">
+        <button type="button" id="next-button" onclick="showNextQuestion()" style="float: right;">Next</button>
+        <button type="submit" id="submit-button" style="display: none; float: right; margin-left: 10px;">Submit</button>
+        <button type="button" id="prev-button" onclick="showPreviousQuestion()" style="display: none; float: right; margin-left: 10px;">Previous</button>
+      </div>
+
+      </div>
+    </form>
+  </div>
+
+  <script>
+    let currentQuestion = 0;
+    const questions = document.querySelectorAll('.input-group');
+    const prevButton = document.getElementById('prev-button');
+    const nextButton = document.getElementById('next-button');
+    const submitButton = document.getElementById('submit-button');
+
+    function showNextQuestion() {
+      if (currentQuestion < questions.length - 1) {
+        questions[currentQuestion].style.display = 'none';
+        currentQuestion++;
+        questions[currentQuestion].style.display = 'block';
+      }
+      updateButtonVisibility();
+    }
+
+    function showPreviousQuestion() {
+      if (currentQuestion > 0) {
+        questions[currentQuestion].style.display = 'none';
+        currentQuestion--;
+        questions[currentQuestion].style.display = 'block';
+      }
+      updateButtonVisibility();
+    }
+
+    function updateButtonVisibility() {
+      prevButton.style.display = currentQuestion === 0 ? 'none' : 'block';
+      nextButton.style.display = currentQuestion === questions.length - 1 ? 'none' : 'block';
+      submitButton.style.display = currentQuestion === questions.length - 1 ? 'block' : 'none';
+    }
+  </script>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Quiz Results{% endblock %}
+
+{% block content %}
+  <h2>Quiz Results</h2>
+  <p>Your Score: {{ score }}</p>
+
+  <h3>Questions and Answers:</h3>
+  <ul>
+    {% for response in user_responses %}
+      <li>
+        {{ response.question.question_text }}
+        <br>
+        Your Answer: {{ response.selected_option }}
+        {% if response.selected_option == response.question.correct_option %}
+          (Correct)
+        {% else %}
+          (Incorrect, Correct Answer: {{ response.question.correct_option }})
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+
+  <button onclick="restartQuiz()">Restart Quiz</button>
+
+  <script>
+    function restartQuiz() {
+      
+      window.location.href = "{% url 'quiz_page' %}";
+    }
+  </script>
+{% endblock %}

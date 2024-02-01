@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Welcome To Django Quiz{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'authentication/styles.css' %}?v=1.0">
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header>
+    <nav>
+        <ul class="navbar-list">
+            {% if user.is_authenticated %}
+                {% csrf_token %}
+                <li><a href="{% url 'user_login' %}" class="login-button">Loout</a></li>
+                <li><a href="{% url 'user_login' %}" class="login-button">Login</a></li>
+                <li><a href="{% url 'register' %}" class="register-button">Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>
+
+    <main class="{% block container_class %}{% endblock %}">
+        {% block content %}{% endblock %}
+    </main>
+
+</body>
+</html>
